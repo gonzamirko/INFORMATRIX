@@ -54,6 +54,7 @@ public class ComputerCabinetPuzzle : MonoBehaviour
 
                 if (!hasAllItems)
                 {
+                    FeedbackUI.Instance.ShowMessage("Todavía faltan componentes.");
                     Debug.Log("Todavía faltan componentes.");
                     return;
                 }
@@ -68,5 +69,6 @@ public class ComputerCabinetPuzzle : MonoBehaviour
         isCompleted = true;
 
         Debug.Log("¡Computadora armada correctamente!");
+        FeedbackUI.Instance.ShowMessage("¡Computadora armada correctamente!");
     }
 }

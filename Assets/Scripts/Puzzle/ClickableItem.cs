@@ -1,5 +1,6 @@
 using UnityEngine;
 
+
 public class ClickableItem : MonoBehaviour
 {
     [SerializeField] private string itemId;
@@ -35,6 +36,8 @@ public class ClickableItem : MonoBehaviour
                 wasCollected = true;
 
                 InventoryManager.Instance.CollectItem(itemId);
+
+                FeedbackUI.Instance.ShowMessage("Encontraste: " + displayName);
 
                 Debug.Log("Recogiste: " + displayName);
 
