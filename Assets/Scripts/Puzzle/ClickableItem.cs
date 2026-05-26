@@ -37,6 +37,8 @@ public class ClickableItem : MonoBehaviour
 
                 InventoryManager.Instance.CollectItem(itemId);
 
+                InventoryUI.Instance.AddItem(displayName);
+
                 FeedbackUI.Instance.ShowMessage("Encontraste: " + displayName);
 
                 Debug.Log("Recogiste: " + displayName);
