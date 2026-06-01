@@ -5,7 +5,7 @@ public class SceneLoader : MonoBehaviour
 {
     public void LoadPuzzle1()
     {
-        SceneManager.LoadScene("Puzzle1Scene");
+        SceneManager.LoadScene("PuzzleUno");
     }
 
     public void LoadMainMenu()
