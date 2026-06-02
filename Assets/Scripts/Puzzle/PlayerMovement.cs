@@ -9,10 +9,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
 
+    private Rigidbody2D rb;
+
     private void Start()
     {
         targetPosition = transform.position;
         animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     private void Update()
@@ -38,10 +41,17 @@ public class PlayerMovement : MonoBehaviour
             animator.SetFloat("MoveX", direction.x);
             animator.SetFloat("MoveY", direction.y);
 
-            transform.position = Vector3.MoveTowards(
+            /*transform.position = Vector3.MoveTowards(
                 transform.position,
                 targetPosition,
                 moveSpeed * Time.deltaTime
+            );*/
+            rb.MovePosition(
+            Vector2.MoveTowards(
+            rb.position,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+             )
             );
 
            if (Vector3.Distance(transform.position, targetPosition) < 0.05f)
