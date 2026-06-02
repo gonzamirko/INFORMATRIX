@@ -10,6 +10,12 @@ public class PlayerMovement : MonoBehaviour
     private Animator animator;
 
     private Rigidbody2D rb; //cambie esto
+    [Header("Movement Bounds")]
+    [SerializeField] private Vector2 minBounds;
+    [SerializeField] private Vector2 maxBounds;
+
+    [Header("Collision")]
+    [SerializeField] private LayerMask obstacleLayer;
 
     private void Start()
     {
@@ -25,13 +31,29 @@ public class PlayerMovement : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))
         {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(
+                Input.mousePosition
+            );
 
             mousePosition.z = 0;
 
-            targetPosition = mousePosition;
+            Vector3 clampedPosition = new(
+                Mathf.Clamp(mousePosition.x, minBounds.x, maxBounds.x),
+                Mathf.Clamp(mousePosition.y, minBounds.y, maxBounds.y),
+                0
+            );
 
-            isMoving = true;
+            RaycastHit2D obstacle = Physics2D.Linecast(
+                transform.position,
+                clampedPosition,
+                obstacleLayer
+            );
+
+            if (obstacle.collider == null)
+            {
+                targetPosition = clampedPosition;
+                isMoving = true;
+            }
         }
 
         if (isMoving)
