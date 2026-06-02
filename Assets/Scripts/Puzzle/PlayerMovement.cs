@@ -9,13 +9,13 @@ public class PlayerMovement : MonoBehaviour
 
     private Animator animator;
 
-    private Rigidbody2D rb;
+    private Rigidbody2D rb; //cambie esto
 
     private void Start()
     {
         targetPosition = transform.position;
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>(); //cambie esto
     }
 
     private void Update()
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
                 moveSpeed * Time.deltaTime
             );*/
             rb.MovePosition(
-            Vector2.MoveTowards(
+            Vector2.MoveTowards( //cambie esto
             rb.position,
             targetPosition,
             moveSpeed * Time.deltaTime
