@@ -5,8 +5,11 @@ public class ComputerCabinetPuzzle : MonoBehaviour
 {
     [SerializeField] private float interactionDistance = 2f;
 
-    private bool isCompleted;
+    [Header("Visual State")]
+    [SerializeField] private SpriteRenderer cabinetSpriteRenderer;
+    [SerializeField] private Sprite poweredOnSprite;
 
+    private bool isCompleted;
     private GameObject player;
 
     private readonly List<string> requiredItems = new()
@@ -36,37 +39,35 @@ public class ComputerCabinetPuzzle : MonoBehaviour
             player.transform.position
         );
 
-        if (distance <= interactionDistance)
+        if (distance <= interactionDistance && Input.GetKeyDown(KeyCode.E))
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            bool hasAllItems = true;
+
+            foreach (string itemId in requiredItems)
             {
-                bool hasAllItems = true;
-
-                foreach (string itemId in requiredItems)
+                if (!InventoryManager.Instance.HasItem(itemId))
                 {
-                    if (!InventoryManager.Instance.HasItem(itemId))
-                    {
-                        Debug.Log("Falta: " + itemId);
-                        hasAllItems = false;
-                        
-                    }
+                    Debug.Log("Falta: " + itemId);
+                    hasAllItems = false;
                 }
-
-                if (!hasAllItems)
-                {
-                    FeedbackUI.Instance.ShowMessage("Todavía faltan componentes.");
-                    Debug.Log("Todavía faltan componentes.");
-                    return;
-                }
-
-                CompletePuzzle();
             }
+
+            if (!hasAllItems)
+            {
+                FeedbackUI.Instance.ShowMessage("Todavía faltan componentes.");
+                Debug.Log("Todavía faltan componentes.");
+                return;
+            }
+
+            CompletePuzzle();
         }
     }
 
     private void CompletePuzzle()
     {
         isCompleted = true;
+
+        cabinetSpriteRenderer.sprite = poweredOnSprite;
 
         Debug.Log("¡Computadora armada correctamente!");
         FeedbackUI.Instance.ShowMessage("¡Computadora armada correctamente!");
