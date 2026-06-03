@@ -52,8 +52,10 @@ public class PlayerMovement : MonoBehaviour
             if (obstacle.collider == null)
             {
                 targetPosition = clampedPosition;
-                isMoving = true;
-            }
+                 isMoving = true;
+
+                 animator.SetBool("IsMoving", true);
+                }
         }
 
         if (isMoving)
@@ -79,7 +81,7 @@ public class PlayerMovement : MonoBehaviour
            if (Vector3.Distance(transform.position, targetPosition) < 0.05f)
             {
             isMoving = false;
-
+            animator.SetBool("IsMoving",false);
             //animator.SetFloat("MoveX", 0);
            // animator.SetFloat("MoveY", 0);
            //si las descomento el personaje cuando dejo de caminar mira para el frente
