@@ -7,6 +7,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float moveSpeed = 5f;
 
+    private Animator animator;
+
+    private Rigidbody2D rb; //cambie esto
     [Header("Movement Bounds")]
     [SerializeField] private Vector2 minBounds;
     [SerializeField] private Vector2 maxBounds;
@@ -17,10 +20,15 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         targetPosition = transform.position;
+        animator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>(); //cambie esto
     }
 
     private void Update()
     {
+       // animator.SetFloat("MoveX", 1);
+        //animator.SetFloat("MoveY", 0);
+
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(
@@ -44,21 +52,39 @@ public class PlayerMovement : MonoBehaviour
             if (obstacle.collider == null)
             {
                 targetPosition = clampedPosition;
-                isMoving = true;
-            }
+                 isMoving = true;
+
+                 animator.SetBool("IsMoving", true);
+                }
         }
 
         if (isMoving)
         {
-            transform.position = Vector3.MoveTowards(
+            Vector3 direction = (targetPosition - transform.position).normalized;
+
+            animator.SetFloat("MoveX", direction.x);
+            animator.SetFloat("MoveY", direction.y);
+
+            /*transform.position = Vector3.MoveTowards(
                 transform.position,
                 targetPosition,
                 moveSpeed * Time.deltaTime
+            );*/
+            rb.MovePosition(
+            Vector2.MoveTowards( //cambie esto
+            rb.position,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+             )
             );
 
-            if (Vector3.Distance(transform.position, targetPosition) < 0.05f)
+           if (Vector3.Distance(transform.position, targetPosition) < 0.05f)
             {
-                isMoving = false;
+            isMoving = false;
+            animator.SetBool("IsMoving",false);
+            //animator.SetFloat("MoveX", 0);
+           // animator.SetFloat("MoveY", 0);
+           //si las descomento el personaje cuando dejo de caminar mira para el frente
             }
         }
     }
