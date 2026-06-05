@@ -2,14 +2,8 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    private Vector3 targetPosition;
-    private bool isMoving;
+    [SerializeField] private float moveSpeed = 10f;
 
-    [SerializeField] private float moveSpeed = 5f;
-
-    private Animator animator;
-
-    private Rigidbody2D rb; //cambie esto
     [Header("Movement Bounds")]
     [SerializeField] private Vector2 minBounds;
     [SerializeField] private Vector2 maxBounds;
@@ -17,75 +11,94 @@ public class PlayerMovement : MonoBehaviour
     [Header("Collision")]
     [SerializeField] private LayerMask obstacleLayer;
 
-    private void Start()
+    private Vector2 targetPosition;
+    private bool isMoving;
+
+    private Animator animator;
+    private Rigidbody2D rb;
+
+    private void Awake()
     {
-        targetPosition = transform.position;
         animator = GetComponent<Animator>();
-        rb = GetComponent<Rigidbody2D>(); //cambie esto
+        rb = GetComponent<Rigidbody2D>();
+
+        targetPosition = rb.position;
     }
 
     private void Update()
     {
-       // animator.SetFloat("MoveX", 1);
-        //animator.SetFloat("MoveY", 0);
+        HandleClick();
+        UpdateAnimation();
+    }
 
-        if (Input.GetMouseButtonDown(0))
+    private void FixedUpdate()
+    {
+        MovePlayer();
+    }
+
+    private void HandleClick()
+    {
+        if (!Input.GetMouseButtonDown(0))
         {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(
-                Input.mousePosition
-            );
-
-            mousePosition.z = 0;
-
-            Vector3 clampedPosition = new(
-                Mathf.Clamp(mousePosition.x, minBounds.x, maxBounds.x),
-                Mathf.Clamp(mousePosition.y, minBounds.y, maxBounds.y),
-                0
-            );
-
-            RaycastHit2D obstacle = Physics2D.Linecast(
-                transform.position,
-                clampedPosition,
-                obstacleLayer
-            );
-
-            if (obstacle.collider == null)
-            {
-                targetPosition = clampedPosition;
-                 isMoving = true;
-
-                 animator.SetBool("IsMoving", true);
-                }
+            return;
         }
 
-        if (isMoving)
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector2 clampedPosition = new(
+            Mathf.Clamp(mousePosition.x, minBounds.x, maxBounds.x),
+            Mathf.Clamp(mousePosition.y, minBounds.y, maxBounds.y)
+        );
+
+        RaycastHit2D obstacle = Physics2D.Linecast(
+            rb.position,
+            clampedPosition,
+            obstacleLayer
+        );
+
+        if (obstacle.collider != null)
         {
-            Vector3 direction = (targetPosition - transform.position).normalized;
+            return;
+        }
 
-            animator.SetFloat("MoveX", direction.x);
-            animator.SetFloat("MoveY", direction.y);
+        targetPosition = clampedPosition;
+        isMoving = true;
+    }
 
-            /*transform.position = Vector3.MoveTowards(
-                transform.position,
-                targetPosition,
-                moveSpeed * Time.deltaTime
-            );*/
-            rb.MovePosition(
-            Vector2.MoveTowards( //cambie esto
+    private void MovePlayer()
+    {
+        if (!isMoving)
+        {
+            return;
+        }
+
+        Vector2 newPosition = Vector2.MoveTowards(
             rb.position,
             targetPosition,
-            moveSpeed * Time.deltaTime
-             )
-            );
+            moveSpeed * Time.fixedDeltaTime
+        );
 
-           if (Vector3.Distance(transform.position, targetPosition) < 0.05f)
-            {
+        rb.MovePosition(newPosition);
+
+        if (Vector2.Distance(rb.position, targetPosition) < 0.05f)
+        {
+            rb.MovePosition(targetPosition);
             isMoving = false;
-            animator.SetBool("IsMoving",false);
-            //animator.SetFloat("MoveX", 0);
-           // animator.SetFloat("MoveY", 0);
-           //si las descomento el personaje cuando dejo de caminar mira para el frente
-            }
         }
+    }
+
+    private void UpdateAnimation()
+    {
+        animator.SetBool("IsMoving", isMoving);
+
+        if (!isMoving)
+        {
+            return;
+        }
+
+        Vector2 direction = (targetPosition - rb.position).normalized;
+
+        animator.SetFloat("MoveX", direction.x);
+        animator.SetFloat("MoveY", direction.y);
     }
 }
