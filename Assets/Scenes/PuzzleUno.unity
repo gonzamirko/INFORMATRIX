@@ -1275,7 +1275,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   itemId: motherboard
-  displayName: Motherboard
+  displayName: Placa madre
   interactionDistance: 1.5
 --- !u!61 &904252391
 BoxCollider2D:
