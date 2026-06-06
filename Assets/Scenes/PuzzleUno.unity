@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   itemId: ssd
-  displayName: SSD
+  displayName: Disco duro
   interactionDistance: 1.3
 --- !u!61 &372214796
 BoxCollider2D:
@@ -1552,7 +1552,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   itemId: motherboard
-  displayName: Motherboard
+  displayName: Placa madre
   interactionDistance: 1.5
 --- !u!61 &904252391
 BoxCollider2D:
@@ -2682,7 +2682,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   itemId: psu
-  displayName: PSU
+  displayName: Fuente de alimentación
   interactionDistance: 1.5
 --- !u!61 &1460512215
 BoxCollider2D:
@@ -3461,7 +3461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ClickableItem
   itemId: gpu
-  displayName: GPU
+  displayName: Tarjeta gráfica
   interactionDistance: 1.5
 --- !u!61 &1885190750
 BoxCollider2D:
