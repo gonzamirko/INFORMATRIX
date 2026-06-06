@@ -9,6 +9,9 @@ public class ComputerCabinetPuzzle : MonoBehaviour
     [SerializeField] private SpriteRenderer cabinetSpriteRenderer;
     [SerializeField] private Sprite poweredOnSprite;
 
+    [Header("Completion UI")]
+    [SerializeField] private GameObject puzzleCompletedPanel;
+
     private bool isCompleted;
     private GameObject player;
 
@@ -25,6 +28,11 @@ public class ComputerCabinetPuzzle : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+
+        if (puzzleCompletedPanel != null)
+        {
+            puzzleCompletedPanel.SetActive(false);
+        }
     }
 
     private void Update()
@@ -69,7 +77,13 @@ public class ComputerCabinetPuzzle : MonoBehaviour
 
         cabinetSpriteRenderer.sprite = poweredOnSprite;
 
+        if (puzzleCompletedPanel != null)
+        {
+            puzzleCompletedPanel.SetActive(true);
+        }
+
+        Time.timeScale = 0f;
+
         Debug.Log("¡Computadora armada correctamente!");
-        FeedbackUI.Instance.ShowMessage("¡Computadora armada correctamente!");
     }
 }
